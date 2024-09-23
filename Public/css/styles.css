@@ -1,0 +1,229 @@
+
+:root{
+    --themeColor: #59097a;
+    --secundaryColor: #FF12FB;
+    --hoverColor: #c249f6;
+}
+
+
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Ubuntu", sans-serif;
+}
+
+
+header{
+    margin: 0 20px !important;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+header div{
+    align-items: center;
+    display: flex;
+}
+.logo{
+    width: 50px;
+    height: 50px;
+}
+
+.nav-content{
+    display: flex;
+    justify-content: center !important;
+    align-items: center !important;
+    
+}
+
+.nav-link{
+    color: var(--secundaryColor);
+    margin: 5px;
+    border-radius: 10px;
+    font-family: "Ubuntu", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+    font-size: 20px;
+}
+
+.nav-link:hover{
+    color: white;
+    background-color: var(--themeColor);
+}
+
+.nav-user{
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title-logo{
+    color: var(--secundaryColor);
+    font-size: 30px;
+   
+}
+
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #e4dee4;
+    max-width: 550px;
+    margin-top: 50px;
+    border-radius: 10px;
+    box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.3)
+}
+
+.home-img{
+    width: 500px;
+    height: 500px;
+}
+
+.title-cont, label{
+    color: var(--themeColor);
+}
+
+.container-faq{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    flex-direction: column;
+}
+
+.table-faq{
+    width: 90%;
+    margin-top: 20px;
+}
+
+.btn-cont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+}
+
+.btn{
+    background-color: var(--themeColor);
+    color: white;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+}
+
+.btn:hover{
+    background-color: var(--secundaryColor);
+    color: var(--themeColor);
+}
+
+.form-group{
+    padding: 10px;
+}
+
+#message{
+    margin-top: 20px;
+}
+
+.container-search {
+    width: 100%;
+    background-color: #59097a;
+    color: white;
+    padding-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.button-faq{
+    position: absolute;
+    bottom: 50px;
+    right: 8px;
+}
+
+.btn a{
+    text-decoration: none !important;
+    color: white;
+}
+
+.btn a:hover{
+    color: var(--themeColor);
+}
+
+.footer-cont{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+.footer-cont p{
+    text-align: center;
+}
+
+.group-search{
+    display: flex;
+    justify-content: space-between;
+}
+
+.boton{
+    position: relative;
+    right: 50px;
+    border-radius: 50px;
+    background-color: white;
+    outline: none;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.boton i{
+    background-color: white;
+    font-size: 25px;
+    border-radius: 50px;
+    color: #59097a;
+}  
+
+
+
+.home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.home p{
+    padding: 20px;
+    margin: 20px;
+    font-size: 30px;
+}
+
+.btn-inicio{
+    position: absolute;
+    bottom: 50px;
+    right: 50px;
+}
+
+.btn-inicio button{
+    background-color: var(--themeColor);
+    border: none;
+    outline: none;
+    border-radius: 70px;
+    padding: 10px;
+    color: white;
+    width: 150px;
+    font-weight: bold;
+}
+
+.btn-inicio button:hover{
+    background-color: var(--hoverColor);
+    color: var(--themeColor);
+    font-weight: bold;
+}
