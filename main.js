@@ -19,7 +19,6 @@ app.get('/inicio', verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'inicio.html'));
 });
 
-
 const port = 3001;
 
 app.listen(port,()=>{

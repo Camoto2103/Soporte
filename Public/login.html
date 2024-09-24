@@ -52,78 +52,55 @@
     </div>
 
     <script>
-        
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-        
-            const nombre = document.getElementById('nombre').value;
-            const password = document.getElementById('password').value;
-            const form = document.getElementById('loginForm');  
-            const alertMessage = document.getElementById('alertMessage'); 
-        
-            try {
-                const response = await fetch('/api/usuarios/login', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ nombre, password })
-                });
-        
-                const result = await response.json();
-        
-                if (response.ok) {
-                    alertMessage.className = 'alert alert-success'; 
-                    alertMessage.innerText = '¡Login exitoso! Redirigiendo...';
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+            
+                const nombre = document.getElementById('nombre').value;
+                const password = document.getElementById('password').value;
+                const form = document.getElementById('loginForm');  
+                const alertMessage = document.getElementById('alertMessage'); 
+            
+                try {
+                    const response = await fetch('/api/usuarios/login', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ nombre, password })
+                    });
+            
+                    const result = await response.json();
+            
+                    if (response.ok) {
+                        alertMessage.className = 'alert alert-success'; 
+                        alertMessage.innerText = '¡Login exitoso! Redirigiendo...';
+                        alertMessage.style.display = 'block';
+            
+                        form.reset();
+                        
+                        // Guardar el token y el nombre del usuario en localStorage
+                        localStorage.setItem('token', result.token);
+                        localStorage.setItem('nombreUsuario', result.nombre); // Guardar el nombre
+            
+                        setTimeout(() => {
+                            window.location.href = '/inicio.html'; // Redirigir a la página principal
+                        }, 2000);
+                    } else {
+                        alertMessage.className = 'alert alert-danger';  
+                        alertMessage.innerText = result.error || 'Hubo un problema en el inicio de sesión';
+                        alertMessage.style.display = 'block';
+            
+                        form.reset();
+                    }
+                } catch (err) {
+                    console.error('Error:', err);
+                    alertMessage.className = 'alert alert-danger';
+                    alertMessage.innerText = 'Error de servidor';
                     alertMessage.style.display = 'block';
-        
-                    form.reset();
-    
-                    localStorage.setItem('token', result.token);
-    
-                    setTimeout(() => {
-                        window.location.href = '/inicio';
-                    }, 2000);
-                } else {
-                    alertMessage.className = 'alert alert-danger';  
-                    alertMessage.innerText = result.error || 'Hubo un problema en el inicio de sesión';
-                    alertMessage.style.display = 'block';
-    
+            
                     form.reset();
                 }
-            } catch (err) {
-                console.error('Error:', err);
-                alertMessage.className = 'alert alert-danger';
-                alertMessage.innerText = 'Error de servidor';
-                alertMessage.style.display = 'block';
-    
-                form.reset();
-            }
-        });
-    
-        // Función para solicitar a una ruta protegida
-        async function fetchProtectedData() {
-            const token = localStorage.getItem('token');
-    
-            if (!token) {
-                alert('No token found! Please log in.');
-                return;
-            }
-    
-            try {
-                const response = await fetch('/api/protegida', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`  
-                    }
-                });
-    
-                const data = await response.json();
-                console.log('Protected data:', data);
-            } catch (error) {
-                console.error('Error accessing protected route:', error);
-            }
-        }
-    
+            });
+
+        
         window.addEventListener('pageshow', function (event) {
             if (event.persisted) {
                 window.location.reload();

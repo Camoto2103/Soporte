@@ -36,10 +36,10 @@ const verifyToken = (req, res, next) => {
     });
 };
 
-// Ruta protegida que requiere el token JWT
 router.get('/protegida', verifyToken, (req, res) => {
     res.json({ message: 'Acceso permitido', userId: req.userId });
 });
+
 
 // Ruta para el login (POST)
 router.post('/login', (req, res) => {
@@ -73,7 +73,8 @@ router.post('/login', (req, res) => {
 
             res.status(200).json({
                 message: 'Autenticación exitosa',
-                token: token
+                token: token,
+                nombre: user.nombre // Enviar el nombre del usuario en la respuesta
             });
         }
     );
@@ -125,18 +126,22 @@ router.get('/faqs', (req, res) => {
     });
 });
 
-// Ruta para crear un nuevo ticket
-router.post('/tickets', (req, res) => {
+// Ruta para crear un nuevo ticket asociado al usuario autenticado
+router.post('/tickets', verifyToken, (req, res) => {
     const { nombre, email, categoria, descripcion } = req.body;
 
     if (!nombre || !email || !categoria || !descripcion) {
         return res.status(400).json({ error: 'Todos los campos son obligatorios' });
     }
 
-    const num_ticket = Math.floor(Math.random() * 1000000); 
+    // Obtener id_usuario desde el token
+    const id_usuario = req.userId;
 
-    const query = 'INSERT INTO tickets (nombre, email, categoria, descripcion, num_ticket) VALUES (?, ?, ?, ?, ?)';
-    conexion.query(query, [nombre, email, categoria, descripcion, num_ticket], (err, result) => {
+    // Generar un número de ticket
+    const num_ticket = Math.floor(Math.random() * 1000000); // Generar un número aleatorio para el ticket
+
+    const query = 'INSERT INTO tickets (id_usuario, nombre, email, categoria, descripcion, num_ticket) VALUES (?, ?, ?, ?, ?, ?)';
+    conexion.query(query, [id_usuario, nombre, email, categoria, descripcion, num_ticket], (err, result) => {
         if (err) {
             console.log('Error al crear ticket:', err);
             return res.status(500).json({ error: 'Error al crear el ticket' });
@@ -146,21 +151,53 @@ router.post('/tickets', (req, res) => {
     });
 });
 
-// Ruta para obtener los tickets con sus respuestas
-router.get('/tickets/:id/respuestas', (req, res) => {
-    const { id } = req.params;
-    const query = `
-        SELECT tr.id_ticket, tr.respuesta, tr.estado, tr.fecha_actualizacion
-        FROM tickets_respuestas tr
-        WHERE tr.id_ticket = ?
-    `;
 
-    conexion.query(query, [id], (err, resultados) => {
+// Ruta para obtener los tickets del usuario autenticado
+router.get('/tickets', verifyToken, (req, res) => {
+    const id_usuario = req.userId; // Obtener id_usuario desde el token
+
+    const query = 'SELECT * FROM tickets WHERE id_usuario = ?';
+    conexion.query(query, [id_usuario], (err, resultados) => {
         if (err) {
-            console.log('Error al obtener respuestas del ticket:', err);
-            return res.status(500).json({ error: 'Error al obtener las respuestas del ticket' });
+            console.log('Error al obtener los tickets:', err);
+            return res.status(500).json({ error: 'Error al obtener los tickets' });
+        }
+        if (resultados.length === 0) {
+            return res.status(404).json({ error: 'No se encontraron tickets' });
         }
         res.json(resultados);
+    });
+});
+
+
+// Ruta para obtener las respuestas de un ticket del usuario autenticado
+router.get('/tickets/:id/respuestas', verifyToken, (req, res) => {
+    const { id } = req.params;
+    const id_usuario = req.userId; // Obtener id_usuario desde el token
+
+    // Verificar que el ticket pertenece al usuario autenticado
+    const query = `
+        SELECT * FROM tickets WHERE id_ticket = ? AND id_usuario = ?
+    `;
+    conexion.query(query, [id, id_usuario], (err, ticket) => {
+        if (err || ticket.length === 0) {
+            console.log('Error al obtener el ticket o no pertenece al usuario:', err);
+            return res.status(404).json({ error: 'Ticket no encontrado o no pertenece al usuario' });
+        }
+
+        // Obtener las respuestas del ticket
+        const respuestaQuery = `
+            SELECT tr.id_ticket, tr.respuesta, tr.estado, tr.fecha_actualizacion
+            FROM tickets_respuestas tr
+            WHERE tr.id_ticket = ?
+        `;
+        conexion.query(respuestaQuery, [id], (err, respuestas) => {
+            if (err) {
+                console.log('Error al obtener respuestas del ticket:', err);
+                return res.status(500).json({ error: 'Error al obtener las respuestas del ticket' });
+            }
+            res.json(respuestas);
+        });
     });
 });
 

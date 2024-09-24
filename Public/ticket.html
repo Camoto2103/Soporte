@@ -27,7 +27,7 @@
                 <a class="nav-link active" aria-current="page" href="inicio.html">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">Mis Tickets</a>
+                <a class="nav-link active" aria-current="page" href="datos-ticket.html">Mis Tickets</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link active nav-user" aria-disabled="true" href="login.html">
@@ -41,17 +41,18 @@
 <div class="container mt-4">
     <h2>Crea un nuevo ticket</h2>
     <form id="ticketForm">
-        <div class="mb-3">
-            <label for="nombre" class="form-label">Tu nombre</label>
-            <input type="text" class="form-control" id="nombre" required>
+        <div class="form-group mb-3">
+            <label for="nombre">Nombre del Usuario</label>
+            <input type="text" class="form-control" id="nombreUsuario" name="nombre" readonly> <!-- El nombre del usuario será mostrado aquí -->
         </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Correo electrónico</label>
-            <input type="email" class="form-control" id="email" required>
+        
+        <div class="form-group mb-3">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" name="email" required>
         </div>
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label for="categoria" class="form-label">Categoría del problema</label>
-            <select class="form-control" id="categoria" required>
+            <select class="form-control" id="categoria" name="categoria" required>
                 <option value="">Ninguna</option>
                 <option value="conectividad">Conectividad</option>
                 <option value="hardware">Hardware</option>
@@ -59,12 +60,12 @@
                 <option value="otros">Otros</option>
             </select>
         </div>
-        <div class="mb-3">
+        <div class="form-group mb-3">
             <label for="descripcion" class="form-label">Descripción del problema</label>
-            <textarea class="form-control" id="descripcion" rows="4" required></textarea>
+            <textarea class="form-control" id="descripcion" name="descripcion" rows="4" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Crear Ticket</button>
-    </form>
+    </form>    
     <div id="ticketResponse" class="mt-3"></div>
 </div>
 
@@ -76,27 +77,43 @@
     document.getElementById('ticketForm').addEventListener('submit', function (e) {
         e.preventDefault();
     
-        const nombre = document.getElementById('nombre').value;
+        // Capturando los valores del formulario
+        const nombre = document.getElementById('nombreUsuario').value;
         const email = document.getElementById('email').value;
         const categoria = document.getElementById('categoria').value;
         const descripcion = document.getElementById('descripcion').value;
-
+    
+        // Validación de que todos los campos están completos
+        if (!nombre || !email || !categoria || !descripcion) {
+            document.getElementById('ticketResponse').innerHTML = `<div class="alert alert-warning">Por favor, completa todos los campos.</div>`;
+            return;
+        }
+    
+        // Recuperar el token del almacenamiento local
+        const token = localStorage.getItem('token');
+    
+        // Enviar los datos al servidor
         fetch('/api/usuarios/tickets', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Enviar el token en los headers
             },
-            body: JSON.stringify({ nombre, email, categoria, descripcion }),
+            body: JSON.stringify({ nombre, email, categoria, descripcion }), // Enviar todos los campos
         })
         .then(response => response.json())
         .then(data => {
-            
             const ticketResponse = document.getElementById('ticketResponse');
             if (data.message) {
                 ticketResponse.innerHTML = `
                     <div class="alert alert-success">
                         ${data.message}<br> Número de Ticket: ${data.num_ticket}
                     </div>`;
+    
+                // Limpiar los campos del formulario después de crear el ticket
+                document.getElementById('email').value = '';
+                document.getElementById('categoria').value = '';
+                document.getElementById('descripcion').value = '';
             } else {
                 ticketResponse.innerHTML = `<div class="alert alert-danger">${data.error}</div>`;
             }
@@ -106,6 +123,16 @@
         });
     });
     
+    document.addEventListener('DOMContentLoaded', function () {
+        const nombreUsuario = localStorage.getItem('nombreUsuario');
+        
+        if (nombreUsuario) {
+            document.getElementById('nombreUsuario').value = nombreUsuario;
+        } else {
+            document.getElementById('nombreUsuario').value = 'Usuario no identificado'; // Mensaje por defecto si no hay nombre
+        }
+    });
+     
     window.addEventListener('pageshow', function (event) {
         if (event.persisted) {
             window.location.reload();
