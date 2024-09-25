@@ -19,27 +19,25 @@ async function datos(){
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
+//cerrar sesion
 
-    if (!token) {
-        window.location.href = '/login.html';
+const logoutButton = document.getElementById('logoutBtn');
+    // Escuchar el click en el botón
+logoutButton.addEventListener('click', () => {
+    // Realizar la petición al servidor para cerrar sesión
+    fetch('api/usuarios/logout', { method: 'GET' })
+    .then(response => {
+    if (response.ok) {
+        // Redirigir al usuario a la página de inicio o login
+        window.location.href = '/login';
     } else {
-        fetch('/api/usuarios/protegida', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                window.location.href = '/login.html';
-            }
-        })
-        .catch(error => {
-            console.error('Error al verificar el token', error);
-            window.location.href = '/login.html';
-        });
+        console.error('Error al cerrar sesión');
     }
+    })
+    .catch(error => {
+    console.error('Error en la solicitud:', error);
+    });
 });
+
+
 

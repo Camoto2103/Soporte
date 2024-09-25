@@ -14,25 +14,28 @@
 </head>
 <body>
 <header>
-
     <div>
         <span>
-            <img class="logo" src="./images/logo.png" alt="logo">
+           <a href='/'><img class="logo" src="./images/logo.png" alt="logo"></a> 
         </span>
         <span class="title-logo">SupportGurus</span>
     </div>
     <nav>
         <ul class="nav justify-content-end">
             <li class="nav-item"></li>
-                <a class="nav-link active" aria-current="page" href="inicio.html">Inicio</a>
+                <a class="nav-link active" aria-current="page" href="/inicio">Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="datos-ticket.html">Mis Tickets</a>
+                <a class="nav-link active" aria-current="page" href="/datos-ticket">Mis Tickets</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link active nav-user" aria-disabled="true" href="login.html">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class='bx bxs-user-circle'></i>
                 </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li><span id="userName"></span></li>
+                    <li><a class="dropdown-item" id="logoutBtn">Cerrar Sesion</a></li>
+                </ul>
             </li>
         </ul>
     </nav>

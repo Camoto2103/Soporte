@@ -17,27 +17,26 @@ router.get('/', (rec, res)=>{
 });
 
 // Middleware para verificar el token JWT
-const verifyToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-
-    if (!authHeader) {
-        return res.status(403).json({ error: 'Token no proporcionado' });
+function verifyToken(req, res, next) {
+    console.log("Cookies recibidas:", req.cookies); 
+    const token = req.cookies.token; 
+    
+    if (!token) {
+        return res.status(401).json({ message: "Token no proporcionado" });
     }
 
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(token, 'secretKey', (err, decoded) => {
-        if (err) {
-            return res.status(401).json({ error: 'Token no válido' });
-        }
-
-        req.userId = decoded.id; 
+    try {
+        const payload = jwt.verify(token, 'secretKey');
+        req.nombre = payload.nombre;
         next();
-    });
-};
+    } catch (error) {
+        return res.status(403).json({ message: "Token no válido" });
+    }
+}
 
 router.get('/protegida', verifyToken, (req, res) => {
     res.json({ message: 'Acceso permitido', userId: req.userId });
+    
 });
 
 
@@ -70,7 +69,7 @@ router.post('/login', (req, res) => {
             }
 
             const token = jwt.sign({ id: user.id, nombre: user.nombre }, 'secretKey', { expiresIn: '1h' });
-
+            console.log(token);
             res.status(200).json({
                 message: 'Autenticación exitosa',
                 token: token,
@@ -79,6 +78,14 @@ router.post('/login', (req, res) => {
         }
     );
 });
+
+// Ruta para cerrar sesión
+router.get('/logout', (req, res) => {
+
+    res.clearCookie('token', { path: '/' });
+    res.status(200).json({ message: 'Sesión cerrada' });
+    
+  });
 
 // Ruta para registrar un nuevo usuario (POST)
 router.post('/registro', async (req, res) => {
@@ -108,7 +115,6 @@ router.post('/registro', async (req, res) => {
         res.status(500).json({ error: 'Error al registrar usuario' });
     }
 });
-
 
 // Ruta para buscar FAQs por palabra clave en la pregunta
 router.get('/faqs', (req, res) => {
