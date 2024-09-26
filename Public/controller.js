@@ -22,13 +22,13 @@ async function datos(){
 //cerrar sesion
 
 const logoutButton = document.getElementById('logoutBtn');
-    // Escuchar el click en el botón
+    
 logoutButton.addEventListener('click', () => {
-    // Realizar la petición al servidor para cerrar sesión
+    
     fetch('api/usuarios/logout', { method: 'GET' })
     .then(response => {
     if (response.ok) {
-        // Redirigir al usuario a la página de inicio o login
+        
         window.location.href = '/login';
     } else {
         console.error('Error al cerrar sesión');
@@ -39,5 +39,28 @@ logoutButton.addEventListener('click', () => {
     });
 });
 
+// Función para obtener los datos del usuario
+function obtenerUsuario() {
+    fetch('api/usuarios/usuario', {
+        method: 'GET',
+        credentials: 'include' 
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos del usuario');
+        }
+        return response.json(); 
+    })
+    .then(data => {
+       
+        document.getElementById('nombreUsuario').value = data.nombre; 
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+
+
+window.onload = obtenerUsuario;
 
 

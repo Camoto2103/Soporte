@@ -43,15 +43,17 @@
     </nav>
 </header>
  
-<div class="container mt-4">
+<div class=" container-ticket">
     <h2>Detalles del Ticket</h2>
     <table class="table">
         <thead>
             <tr>
                 <th>ID Ticket</th>
-                <th>Respuesta</th>
-                <th>Estado</th>
-                <th>Fecha Actualización</th>
+                <th>Nombre del usuario</th>
+                <th>Categoría</th>
+                <th>Descripción</th>
+                <th># Ticket</th>
+                <th>Fecha Creación</th>
             </tr>
         </thead>
         <tbody id="ticketRespuestasBody">
@@ -65,38 +67,38 @@
 </footer>
 
 <script>
-    // Función para obtener el token almacenado (si usas LocalStorage o cookies)
-    const token = localStorage.getItem('token'); // Ajusta esto según dónde guardas el token
+     document.addEventListener('DOMContentLoaded', async () => {
+        try {
+            const response = await fetch('api/usuarios/tickets', {
+                method: 'GET',
+                credentials: 'include' // Asegúrate de incluir las cookies con el token
+            });
 
-    fetch('/api/usuarios/tickets', {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}` // Agrega el token al header
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        const tableBody = document.getElementById('ticketsBody');
-        data.forEach(ticket => {
-            const row = `
-                <tr>
-                    <td>${ticket.id_ticket}</td>
+            if (!response.ok) {
+                throw new Error('Error al obtener los tickets');
+            }
+
+            const tickets = await response.json(); 
+
+            const tbody = document.getElementById('ticketRespuestasBody');
+            tbody.innerHTML = ''; // Limpiar el contenido anterior
+
+            tickets.forEach(ticket => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${ticket.id}</td>
                     <td>${ticket.nombre}</td>
                     <td>${ticket.categoria}</td>
-                    <td>${ticket.estado || 'Pendiente'}</td> <!-- Muestra "Pendiente" si no hay estado -->
+                    <td>${ticket.descripcion}</td>
+                    <td>${ticket.num_ticket}</td>
                     <td>${ticket.fecha_creacion}</td>
-                </tr>
-            `;
-            tableBody.insertAdjacentHTML('beforeend', row);
-        });
-    })
-    .catch(error => {
-        console.log('Error al obtener los tickets:', error);
-    });
-    
-    window.addEventListener('pageshow', function (event) {
-        if (event.persisted) {
-            window.location.reload();
+                `;
+                tbody.appendChild(row);
+            });
+
+        } catch (error) {
+            console.error(error);
+            // Aquí puedes manejar el error, como mostrar un mensaje en la interfaz de usuario
         }
     });
 </script>

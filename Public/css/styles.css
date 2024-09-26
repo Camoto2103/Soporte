@@ -227,3 +227,11 @@ header div{
     color: var(--themeColor);
     font-weight: bold;
 }
+
+.container-ticket{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    background-color: #59097a;
+}
