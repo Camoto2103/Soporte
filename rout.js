@@ -29,11 +29,39 @@ function verifyToken(req, res, next) {
         const payload = jwt.verify(token, 'secretKey');
         req.userId = payload.id; 
         req.nombre = payload.nombre;
+        req.rol = payload.rol; 
+
         next();
     } catch (error) {
         return res.status(403).json({ message: "Token no válido" });
     }
 }
+
+// Middleware para verificar si el usuario es administrador
+function verifyAdmin(req, res, next) {
+    console.log("Rol del usuario:", req.rol);
+    if (req.rol !== 'admin') {
+        return res.status(403).json({ message: "Acceso denegado. No eres administrador." });
+    }
+    next();
+}
+
+// Ruta para obtener todos los tickets (solo accesible por el administrador)
+router.get('/admin', verifyToken, verifyAdmin, async (req, res) => {
+    const query = 'SELECT * FROM tickets';
+    conexion.query(query, (err, resultados) => {
+        if (err) {
+            console.log('Error al obtener los tickets:', err);
+            return res.status(500).json({ error: 'Error al obtener los tickets' });
+        }
+        if (resultados.length === 0) {
+            return res.status(404).json({ error: 'No se encontraron tickets' });
+        }
+        res.json(resultados);
+    });
+
+});
+
 
 router.get('/protegida', verifyToken, (req, res) => {
     res.json({ 
@@ -71,7 +99,7 @@ router.post('/login', (req, res) => {
                 return res.status(401).json({ error: 'Contraseña incorrecta' });
             }
 
-            const token = jwt.sign({ id: user.id, nombre: user.nombre }, 'secretKey', { expiresIn: '1h' });
+            const token = jwt.sign({ id: user.id, nombre: user.nombre, rol: user.rol }, 'secretKey', { expiresIn: '1h' });
             console.log(token);
             res.status(200).json({
                 message: 'Autenticación exitosa',
@@ -215,3 +243,4 @@ router.get('/tickets', verifyToken, (req, res) => {
 
 module.exports = router;
 module.exports.verifyToken = verifyToken;
+module.exports.verifyAdmin = verifyAdmin;

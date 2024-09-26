@@ -60,7 +60,5 @@ function obtenerUsuario() {
     });
 }
 
-
 window.onload = obtenerUsuario;
-
 

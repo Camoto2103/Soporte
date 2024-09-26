@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const objectRout = require('./rout.js');
 const app = express();
-const { verifyToken } = require('./rout.js'); 
+const { verifyToken, verifyAdmin } = require('./rout.js'); 
 const cookieParser = require('cookie-parser');
 
 app.use(express.static(path.join(__dirname, 'Public')));
@@ -17,7 +17,6 @@ app.get('/index', (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'index.html'));
 });
 
-
 app.get('/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'login.html'));
 });
@@ -30,12 +29,16 @@ app.get('/inicio', verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'inicio.html'));
 });
 
-app.get('/ticket', verifyToken,(req, res) => {
+app.get('/ticket', verifyToken, (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'ticket.html'));
 });
 
-app.get('/datos-ticket', verifyToken,(req, res) => {
+app.get('/datos-ticket', verifyToken,  (req, res) => {
     res.sendFile(path.join(__dirname, 'Public', 'datos-ticket.html'));
+});
+
+app.get('/admin', verifyToken, verifyAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'admin.html'));
 });
 
 
