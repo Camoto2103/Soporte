@@ -104,7 +104,8 @@ router.post('/login', (req, res) => {
             res.status(200).json({
                 message: 'Autenticación exitosa',
                 token: token,
-                nombre: user.nombre // Enviar el nombre del usuario en la respuesta
+                nombre: user.nombre, // Enviar el nombre del usuario en la respuesta
+                rol: user.rol  // Aquí devolvemos el rol
             });
         }
     );

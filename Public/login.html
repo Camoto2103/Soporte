@@ -83,7 +83,12 @@
                     form.reset();
                     
                     setTimeout(() => {
-                        window.location.href = '/inicio'; // Redirigir a la página principal
+                        // Redirigir según el rol del usuario
+                        if (result.rol === 'admin') {
+                            window.location.href = '/admin';  // Redirigir a la página de administrador
+                        } else {
+                            window.location.href = '/inicio';  // Redirigir a la página de usuarios regulares
+                        }
                     }, 2000);
                 } else {
                     alertMessage.className = 'alert alert-danger';  
@@ -94,11 +99,9 @@
                 }
             } catch (err) {
                 console.error('Error:', err);
-                alertMessage.className = 'alert alert-danger';
-                alertMessage.innerText = 'Error de servidor';
+                alertMessage.className = 'alert alert-danger';  
+                alertMessage.innerText = 'Error interno, por favor intenta más tarde';
                 alertMessage.style.display = 'block';
-            
-                form.reset();
             }
         });
         
