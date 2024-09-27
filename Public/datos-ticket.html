@@ -14,7 +14,7 @@
 </head>
 <body>
 <header>
-    <div>
+    <div class="cont-logo">
         <span>
            <a href='/'>
             <img class="logo" src="./images/logo.png" alt="logo">
@@ -43,28 +43,32 @@
     </nav>
 </header>
  
-<div class=" container-ticket">
-    <h2>Detalles del Ticket</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>ID Ticket</th>
-                <th>Nombre del usuario</th>
-                <th>Categoría</th>
-                <th>Descripción</th>
-                <th># Ticket</th>
-                <th>Fecha Creación</th>
-            </tr>
-        </thead>
-        <tbody id="ticketRespuestasBody">
-            <!-- Aquí se insertarán los datos -->
-        </tbody>
-    </table>
-</div>
+<main class="container-faq">
+    <div class="container-search mt-4">
+        <h2>Detalles del Ticket</h2>
+    </div>
+    <div class="table-faq">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID Ticket</th>
+                    <th>Nombre del usuario</th>
+                    <th>Categoría</th>
+                    <th>Descripción</th>
+                    <th># Ticket</th>
+                    <th>Fecha Creación</th>
+                </tr>
+            </thead>
+            <tbody id="ticketRespuestasBody">
+                <!-- Aquí se insertarán los datos -->
+            </tbody>
+        </table>
+    </div>
+</main>
 
-<footer class=" footer-cont"></footer>
-    <p class="text-center">&copy; 2024 SupportGurus. Todos los derechos reservados.</p>
-</footer>
+<div class=" footer-cont">
+    &copy; 2024 SupportGurus. Todos los derechos reservados.
+ </div>
 
 <script>
      document.addEventListener('DOMContentLoaded', async () => {

@@ -14,7 +14,7 @@
 </head>
 <body>
 <header>
-    <div>
+    <div class="cont-logo">
         <span>
            <a href='/'>
             <img class="logo" src="./images/logo.png" alt="logo">
@@ -25,47 +25,40 @@
     <nav>
         <ul class="nav justify-content-end">
             <li class="nav-item"></li>
-                <a class="nav-link active" aria-current="page" href="/inicio">Inicio</a>
-            </li>
-            <li class="nav-item"></li>
-                <a class="nav-link active" aria-current="page" href="/ticket">Crear Tickets</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class='bx bxs-user-circle'></i>
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <li><span id="userName"></span></li>
-                    <li><a class="dropdown-item" id="logoutBtn">Cerrar Sesion</a></li>
-                </ul>
+                <a class="nav-link active" id="logoutBtn">Cerrar Sesión</a>
             </li>
         </ul>
     </nav>
 </header>
-<div class="container mt-5">
-    <h1>Panel de Administración</h1>
-    <h2>Listado de Tickets</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Email</th>
-                <th>Categoría</th>
-                <th>Descripción</th>
-                <th>Número de Ticket</th>
-                <th>Fecha de Creación</th>
-            </tr>
-        </thead>
-        <tbody id="ticketTableBody">
-            <!-- Aquí se llenarán los tickets con JavaScript -->
-        </tbody>
-    </table>
-</div>
 
-<footer class=" footer-cont"></footer>
-    <p class="text-center">&copy; 2024 SupportGurus. Todos los derechos reservados.</p>
-</footer>
+<main class="container-faq">
+    <div class="container-search mt-4">
+        <h2>Tickets</h2>
+    </div>
+    <div class="table-faq">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Email</th>
+                    <th>Categoría</th>
+                    <th>Descripción</th>
+                    <th>Número de Ticket</th>
+                    <th>Fecha de Creación</th>
+                </tr>
+            </thead>
+            <tbody id="ticketTableBody">
+                <!-- Aquí se llenarán los tickets con JavaScript -->
+            </tbody>
+        </table>
+    </div>
+</main>
+
+<div class=" footer-cont">
+    &copy; 2024 SupportGurus. Todos los derechos reservados.
+ </div>
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

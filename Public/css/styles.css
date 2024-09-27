@@ -15,16 +15,20 @@ body{
 
 
 header{
-    margin: 0 20px !important;
+    padding: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     text-align: center;
+    border-bottom: 1px solid var(--themeColor);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
 }
 
-header div{
+.cont-logo{
     align-items: center;
     display: flex;
+    margin-left: 20px;
 }
 .logo{
     width: 50px;
@@ -35,7 +39,6 @@ header div{
     display: flex;
     justify-content: center !important;
     align-items: center !important;
-    
 }
 
 .nav-link{
@@ -46,6 +49,7 @@ header div{
     font-weight: 500;
     font-style: normal;
     font-size: 20px;
+    cursor: pointer;
 }
 
 .nav-link:hover{
@@ -160,9 +164,9 @@ header div{
     position: absolute;
     bottom: 0;
     width: 100%;
-}
-
-.footer-cont p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
     text-align: center;
 }
 
@@ -235,3 +239,17 @@ header div{
     flex-direction: column;
     background-color: #59097a;
 }
+
+
+@media (max-width: 767px) {
+    .home-img{
+        width: 200px;
+        height: 200px;
+    }
+
+    .home p{
+        padding: 10px;
+        margin: 10px;
+        font-size: 15px;
+    }
+  }
